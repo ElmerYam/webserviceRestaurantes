@@ -206,8 +206,7 @@ class empleados
     }
 
 
-    private function obtenerUsuarioPorCorreo($correo_emp)
-    {
+    private function obtenerUsuarioPorCorreo($correo_emp){
         $comando = "SELECT " .
             self::NOMBRE_EMP . "," .
             self::PRIMER_APELLIDO_EMP . "," .

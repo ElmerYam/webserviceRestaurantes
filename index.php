@@ -1,7 +1,7 @@
 <?php
 
 require 'controladores/empleados.php';
-require 'controladores/contactos.php';
+require 'controladores/pedidos.php';
 require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
 require 'utilidades/ExceptionApi.php';

@@ -3,17 +3,18 @@
 // freddo
 // elmer jajaja
 
-class contactos
+class pedidos
 {
 
-    const NOMBRE_TABLA = "contacto";
-    const ID_CONTACTO = "idContacto";
-    const PRIMER_NOMBRE = "primerNombre";
-    const PRIMER_APELLIDO = "primerApellido";
-    const TELEFONO = "telefono";
-    const CORREO = "correo";
-    const ID_USUARIO = "idUsuario";
-    //elmer yam 
+    const NOMBRE_TABLA = "pedidos";
+    const ID_PEDIDO = "folio";
+    const ID_CLIENTE = "id_cte";
+    const ID_ESTABLECIMIENTO = "id_estab";
+    const HORA_SOLICITUD = "hora_solicitud";
+    const ESTADO_PEDIDO = "status_pedido";
+    const FORMA_PAGO = "forma_pago";
+    const TOTAL_PEDIDO = "total";
+
     const CODIGO_EXITO = 1;
     const ESTADO_EXITO = 1;
     const ESTADO_ERROR = 2;
@@ -34,17 +35,18 @@ class contactos
 
     public static function post($peticion) //------------------post
     {
-        $idUsuario = usuarios::autorizar();
+        $idEmpleado = empleados::autorizar();
 
         $body = file_get_contents('php://input');
-        $contacto = json_decode($body);
+        var_dump($body);
+        $pedido = json_decode($body);
 
-        $idContacto = contactos::crear($idUsuario, $contacto);
+        $idContacto = pedidos::crear($idEmpleado, $pedido);
 
         http_response_code(201);
         return [
             "estado" => self::CODIGO_EXITO,
-            "mensaje" => "Contacto creado",
+            "mensaje" => "Pedido creado",
             "id" => $idContacto
         ];
 
@@ -148,36 +150,43 @@ class contactos
      * @return string identificador del contacto
      * @throws ExcepcionApi
      */
-    private function crear($idUsuario, $contacto)
+
+    private function crear($idUsuario, $pedido)
     {
-        if ($contacto) {
+        if ($pedido) {
             try {
 
                 $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
 
                 // Sentencia INSERT
                 $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .
-                    self::PRIMER_NOMBRE . "," .
-                    self::PRIMER_APELLIDO . "," .
-                    self::TELEFONO . "," .
-                    self::CORREO . "," .
-                    self::ID_USUARIO . ")" .
-                    " VALUES(?,?,?,?,?)";
+                    self::ID_PEDIDO . "," .
+                    self::ID_CLIENTE . "," .
+                    self::ID_ESTABLECIMIENTO . "," .
+                    self::HORA_SOLICITUD . "," .
+                    self::ESTADO_PEDIDO . "," .
+                    self::FORMA_PAGO . "," .
+                    self:: TOTAL_PEDIDO .")" .
+                    " VALUES(?,?,?,?,?,?,?)";
 
                 // Preparar la sentencia
                 $sentencia = $pdo->prepare($comando);
 
-                $sentencia->bindParam(1, $primerNombre);
-                $sentencia->bindParam(2, $primerApellido);
-                $sentencia->bindParam(3, $telefono);
-                $sentencia->bindParam(4, $correo);
-                $sentencia->bindParam(5, $idUsuario);
+                $sentencia->bindParam(1, $idPedido);
+                $sentencia->bindParam(2, $idCliente);
+                $sentencia->bindParam(3, $idEstablecimiento);
+                $sentencia->bindParam(4, $hora);
+                $sentencia->bindParam(5, $estado);
+                $sentencia->bindParam(6, $forPago);
+                $sentencia->bindParam(7, $totaPedido);
 
-
-                $primerNombre = $contacto->primerNombre;
-                $primerApellido = $contacto->primerApellido;
-                $telefono = $contacto->telefono;
-                $correo = $contacto->correo;
+                $idPedido = $pedido->id_pedido;
+                $idCliente = $pedido->id_cliente;
+                $idEstablecimiento = $pedido->id_estab;
+                $hora = $pedido->hora_solicitud;
+                $estado = $pedido->status_pedido;
+                $forPago = $pedido->forma_pago;
+                $totaPedido = $pedido->total;
 
                 $sentencia->execute();
 
