@@ -10,7 +10,7 @@ class contactos
     const TELEFONO = "telefono";
     const CORREO = "correo";
     const ID_USUARIO = "idUsuario";
-
+    //elmer yam 
     const CODIGO_EXITO = 1;
     const ESTADO_EXITO = 1;
     const ESTADO_ERROR = 2;
@@ -92,7 +92,7 @@ class contactos
     }
 
     /**
-     * Obtiene la colecciÛn de contactos o un solo contacto indicado por el identificador
+     * Obtiene la colecci√≥n de contactos o un solo contacto indicado por el identificador
      * @param int $idUsuario identificador del usuario
      * @param null $idContacto identificador del contacto (Opcional)
      * @return array registros de la tabla contacto
@@ -139,7 +139,7 @@ class contactos
     }
 
     /**
-     * AÒade un nuevo contacto asociado a un usuario
+     * A√±ade un nuevo contacto asociado a un usuario
      * @param int $idUsuario identificador del usuario
      * @param mixed $contacto datos del contacto
      * @return string identificador del contacto
@@ -178,7 +178,7 @@ class contactos
 
                 $sentencia->execute();
 
-                // Retornar en el ˙ltimo id insertado
+                // Retornar en el √∫ltimo id insertado
                 return $pdo->lastInsertId();
 
             } catch (PDOException $e) {
@@ -187,7 +187,7 @@ class contactos
         } else {
             throw new ExcepcionApi(
                 self::ESTADO_ERROR_PARAMETROS,
-                utf8_encode("Error en existencia o sintaxis de par·metros"));
+                utf8_encode("Error en existencia o sintaxis de par√°metros"));
         }
 
     }
@@ -241,7 +241,7 @@ class contactos
      * Elimina un contacto asociado a un usuario
      * @param int $idUsuario identificador del usuario
      * @param int $idContacto identificador del contacto
-     * @return bool true si la eliminaciÛn se pudo realizar, en caso contrario false
+     * @return bool true si la eliminaci√≥n se pudo realizar, en caso contrario false
      * @throws Exception excepcion por errores en la base de datos
      */
     private function eliminar($idUsuario, $idContacto)
