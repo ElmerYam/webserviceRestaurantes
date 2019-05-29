@@ -2,10 +2,7 @@
 
 // freddo
 // elmer jajaja
-/*
-ahhhhhhhhhhh
-ahhhhhhhhhhh
- */
+
 class contactos
 {
 
