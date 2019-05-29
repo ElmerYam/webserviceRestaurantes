@@ -149,11 +149,11 @@ class empleados
         $body = file_get_contents('php://input');        
         $empleado = json_decode($body);        
         $correo_emp = $empleado->correo_emp; 
+        var_dump($body);
         $password_emp = $empleado->password_emp;        
 
         if (self::autenticar($correo_emp, $password_emp)) {
-            $empleadoBD = self::obtenerUsuarioPorCorreo($correo_emp);
-
+            $empleadoBD = self::obtenerUsuarioPorCorreo($correo_emp);            
             if ($empleadoBD != NULL) {
                 http_response_code(200);
                 $respuesta["nombre_emp"] = $empleadoBD["nombre_emp"];

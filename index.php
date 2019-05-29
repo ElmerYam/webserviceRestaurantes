@@ -40,7 +40,7 @@ set_exception_handler(function ($exception) use ($vista) {
 
 // Extraer segmento de la url
 if (isset($_GET['PATH_INFO']))
-    $peticion = explode('/', $_GET['PATH_INFO']);
+    $peticion = explode('/', $_GET['PATH_INFO']);    
 else
     throw new ExceptionApi(ESTADO_URL_INCORRECTA, utf8_encode("No se reconoce la petición"));
 
