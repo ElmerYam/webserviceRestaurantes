@@ -1,8 +1,5 @@
 <?php
 
-// freddo
-// elmer jajaja
-
 class pedidos
 {
 
