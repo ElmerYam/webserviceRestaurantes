@@ -76,10 +76,10 @@ class pedidos
 
     public static function delete($peticion) //------------------delete
     {
-        $idUsuario = usuarios::autorizar();
+        $idEmpleado = empleados::autorizar();
 
         if (!empty($peticion[0])) {
-            if (self::eliminar($idUsuario, $peticion[0]) > 0) {
+            if (self::eliminar($idEmpleado, $peticion[0]) > 0) {
                 http_response_code(200);
                 return [
                     "estado" => self::CODIGO_EXITO,
@@ -261,19 +261,18 @@ class pedidos
      * @return bool true si la eliminación se pudo realizar, en caso contrario false
      * @throws Exception excepcion por errores en la base de datos
      */
-    private function eliminar($idUsuario, $idContacto)
+    private function eliminar($idCliente, $idPedido)
     {
         try {
             // Sentencia DELETE
             $comando = "DELETE FROM " . self::NOMBRE_TABLA .
-                " WHERE " . self::ID_CONTACTO . "=? AND " .
-                self::ID_USUARIO . "=?";
+                " WHERE " . self::ID_PEDIDO . "=? ";
 
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
 
-            $sentencia->bindParam(1, $idContacto);
-            $sentencia->bindParam(2, $idUsuario);
+            $sentencia->bindParam(1, $idPedido);
+          //  $sentencia->bindParam(2, $idCliente);
 
             $sentencia->execute();
 
