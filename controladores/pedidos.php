@@ -160,27 +160,24 @@ class pedidos
 
                 // Sentencia INSERT
                 $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .
-                    self::ID_PEDIDO . "," .
                     self::ID_CLIENTE . "," .
                     self::ID_ESTABLECIMIENTO . "," .
                     self::HORA_SOLICITUD . "," .
                     self::ESTADO_PEDIDO . "," .
                     self::FORMA_PAGO . "," .
                     self:: TOTAL_PEDIDO .")" .
-                    " VALUES(?,?,?,?,?,?,?)";
+                    " VALUES(?,?,?,?,?,?)";
 
                 // Preparar la sentencia
                 $sentencia = $pdo->prepare($comando);
 
-                $sentencia->bindParam(1, $idPedido);
-                $sentencia->bindParam(2, $idCliente);
-                $sentencia->bindParam(3, $idEstablecimiento);
-                $sentencia->bindParam(4, $hora);
-                $sentencia->bindParam(5, $estado);
-                $sentencia->bindParam(6, $forPago);
-                $sentencia->bindParam(7, $totaPedido);
+                $sentencia->bindParam(1, $idCliente);
+                $sentencia->bindParam(2, $idEstablecimiento);
+                $sentencia->bindParam(3, $hora);
+                $sentencia->bindParam(4, $estado);
+                $sentencia->bindParam(5, $forPago);
+                $sentencia->bindParam(6, $totaPedido);
 
-                $idPedido = $pedido->id_pedido;
                 $idCliente = $pedido->id_cliente;
                 $idEstablecimiento = $pedido->id_estab;
                 $hora = $pedido->hora_solicitud;
