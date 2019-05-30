@@ -22,13 +22,13 @@ class pedidos
     public static function get($peticion)
     {
         //consulta si el usuario tiene una clave de poder hacer cambios
-        $idUsuario = empleados::autorizar();
+        $idEmpleado = empleados::autorizar();
 
         //si la variable peticion esta vacia
-        if (empty($peticion[0]))
-            return self::obtenerContactos($idUsuario);
+        if (empty($peticion[0]))                    
+            return self::obtenerPedidos($idEmpleado);
         else
-            return self::obtenerContactos($idUsuario, $peticion[0]);
+            return self::obtenerPedidos($idEmpleado, $peticion[0]);
 
     }
 
@@ -101,12 +101,12 @@ class pedidos
      * @return array registros de la tabla contacto
      * @throws Exception
      */
-    private function obtenerContactos($idCliente, $idPedido = NULL)
+    private function obtenerPedidos($idCliente, $idPedido = NULL)
     {
         try {
             if (!$idPedido) {
-                $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_PEDIDO . "=?";
+                $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;
+                    //" WHERE " . self::ID_PEDIDO . "=?";
 
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
@@ -115,14 +115,14 @@ class pedidos
 
             } else {
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_PEDIDO . "=? AND " .
-                    self::ID_CLIENTE . "=?";
+                    " WHERE " . self::ID_PEDIDO . "=?";// AND " .
+                    //self::ID_CLIENTE . "=?";
 
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
                 // Ligar idContacto e idUsuario
                 $sentencia->bindParam(1, $idPedido, PDO::PARAM_INT);
-                $sentencia->bindParam(2, $idCliente, PDO::PARAM_INT);
+                //$sentencia->bindParam(2, $idCliente, PDO::PARAM_INT);
             }
 
             // Ejecutar sentencia preparada
