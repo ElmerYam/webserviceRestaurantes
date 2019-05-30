@@ -24,8 +24,10 @@ class pedidos
 
     public static function get($peticion)
     {
-        $idUsuario = usuarios::autorizar();
+        //consulta si el usuario tiene una clave de poder hacer cambios
+        $idUsuario = empleados::autorizar();
 
+        //si la variable peticion esta vacia
         if (empty($peticion[0]))
             return self::obtenerContactos($idUsuario);
         else
@@ -102,28 +104,28 @@ class pedidos
      * @return array registros de la tabla contacto
      * @throws Exception
      */
-    private function obtenerContactos($idUsuario, $idContacto = NULL)
+    private function obtenerContactos($idCliente, $idPedido = NULL)
     {
         try {
-            if (!$idContacto) {
+            if (!$idPedido) {
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_USUARIO . "=?";
+                    " WHERE " . self::ID_PEDIDO . "=?";
 
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
                 // Ligar idUsuario
-                $sentencia->bindParam(1, $idUsuario, PDO::PARAM_INT);
+                $sentencia->bindParam(1, $idCliente, PDO::PARAM_INT);
 
             } else {
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_CONTACTO . "=? AND " .
-                    self::ID_USUARIO . "=?";
+                    " WHERE " . self::ID_PEDIDO . "=? AND " .
+                    self::ID_CLIENTE . "=?";
 
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
                 // Ligar idContacto e idUsuario
-                $sentencia->bindParam(1, $idContacto, PDO::PARAM_INT);
-                $sentencia->bindParam(2, $idUsuario, PDO::PARAM_INT);
+                $sentencia->bindParam(1, $idPedido, PDO::PARAM_INT);
+                $sentencia->bindParam(2, $idCliente, PDO::PARAM_INT);
             }
 
             // Ejecutar sentencia preparada
