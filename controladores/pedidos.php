@@ -54,13 +54,12 @@ class pedidos
 
     public static function put($peticion)  //------------------put
     {
-        $idUsuario = usuarios::autorizar();
-
+        $idEmpleado = empleados::autorizar();
         if (!empty($peticion[0])) {
             $body = file_get_contents('php://input');
-            $contacto = json_decode($body);
+            $pedido = json_decode($body);
 
-            if (self::actualizar($idUsuario, $contacto, $peticion[0]) > 0) {
+            if (self::actualizar($pedido, $peticion[0]) > 0) {
                 http_response_code(200);
                 return [
                     "estado" => self::CODIGO_EXITO,
@@ -209,32 +208,41 @@ class pedidos
      * @return PDOStatement
      * @throws Exception
      */
-    private function actualizar($idUsuario, $contacto, $idContacto)
+    private function actualizar($pedido, $idPedido)
     {
         try {
             // Creando consulta UPDATE
             $consulta = "UPDATE " . self::NOMBRE_TABLA .
-                " SET " . self::PRIMER_NOMBRE . "=?," .
-                self::PRIMER_APELLIDO . "=?," .
-                self::TELEFONO . "=?," .
-                self::CORREO . "=? " .
-                " WHERE " . self::ID_CONTACTO . "=? AND " . self::ID_USUARIO . "=?";
+                " SET " .
+                //self::ID_CLIENTE . "=?," .
+                self::ID_ESTABLECIMIENTO . "=?," .
+                self::HORA_SOLICITUD . "=?," .
+                self::ESTADO_PEDIDO . "=?, " .
+                self::FORMA_PAGO . "=?, " .
+                self::TOTAL_PEDIDO . "=? " .
+                " WHERE " . self::ID_PEDIDO . "=? AND " . self::ID_CLIENTE . "=?";
 
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
 
-            $sentencia->bindParam(1, $primerNombre);
-            $sentencia->bindParam(2, $primerApellido);
-            $sentencia->bindParam(3, $telefono);
-            $sentencia->bindParam(4, $correo);
-            $sentencia->bindParam(5, $idContacto);
-            $sentencia->bindParam(6, $idUsuario);
+            //$sentencia->bindParam(1, $idCliente);
+            $sentencia->bindParam(1, $idEstablecimiento);
+            $sentencia->bindParam(2, $hora);
+            $sentencia->bindParam(3, $estado);
+            $sentencia->bindParam(4, $forPago);
+            $sentencia->bindParam(5, $totaPedido);
+            $sentencia->bindParam(6, $idPedido);
+            $sentencia->bindParam(7, $idCliente);
 
-            $primerNombre = $contacto->primerNombre;
-            $primerApellido = $contacto->primerApellido;
-            $telefono = $contacto->telefono;
-            $correo = $contacto->correo;
 
+            $idCliente = $pedido->id_cliente;
+            $idEstablecimiento = $pedido->id_estab;
+            $hora = $pedido->hora_solicitud;
+            $estado = $pedido->status_pedido;
+            $forPago = $pedido->forma_pago;
+            $totaPedido = $pedido->total;
+            //$idPedido = $pedido->id_pedido;
+            
             // Ejecutar la sentencia
             $sentencia->execute();
 
