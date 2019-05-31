@@ -37,16 +37,16 @@ class pedidos
         $idEmpleado = empleados::autorizar();
 
         $body = file_get_contents('php://input');
-        var_dump($body);
+        //var_dump($body);
         $pedido = json_decode($body);
 
-        $idContacto = pedidos::crear($idEmpleado, $pedido);
+        $id_pedido = pedidos::crear($pedido);
 
         http_response_code(201);
         return [
             "estado" => self::CODIGO_EXITO,
             "mensaje" => "Pedido creado",
-            "id" => $idContacto
+            "id" => $id_pedido
         ];
 
     }
@@ -149,7 +149,7 @@ class pedidos
      * @throws ExcepcionApi
      */
 
-    private function crear($idUsuario, $pedido)
+    private function crear($pedido)
     {
         if ($pedido) {
             try {
@@ -176,7 +176,7 @@ class pedidos
                 $sentencia->bindParam(5, $forPago);
                 $sentencia->bindParam(6, $totaPedido);
 
-                $idCliente = $pedido->id_cliente;
+                $idCliente = $pedido->id_cte;
                 $idEstablecimiento = $pedido->id_estab;
                 $hora = $pedido->hora_solicitud;
                 $estado = $pedido->status_pedido;
