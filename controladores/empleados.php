@@ -16,7 +16,6 @@ class empleados
     const CORREO_EMP = "correo_emp";
     const CLAVE_API = "claveApi";
 
-
     const ESTADO_CREACION_EXITOSA = 1;
     const ESTADO_CREACION_FALLIDA = 2;
     const ESTADO_ERROR_BD = 3;

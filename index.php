@@ -1,8 +1,10 @@
 <?php
 
 require 'controladores/empleados.php';
+require 'controladores/clientes.php';
 require 'controladores/pedidos.php';
 require 'controladores/alimentos.php';
+require 'controladores/tipos_cocina.php';
 require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
 require 'utilidades/ExceptionApi.php';
@@ -48,8 +50,13 @@ else
 
 // Obtener recurso
 $recurso = array_shift($peticion);
-$recursos_existentes = array('pedidos', 'empleados','alimentos');
-var_dump($recurso);
+$recursos_existentes = array(
+  'pedidos',
+  'empleados',
+  'alimentos',
+  'tiposCocina',
+  'clientes'
+);
 
 // Comprobar si existe el recurso
 if (!in_array($recurso, $recursos_existentes)) {
