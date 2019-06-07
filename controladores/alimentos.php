@@ -2,16 +2,6 @@
 
 class alimentos
 {
-
-    /*const NOMBRE_TABLA = "alimentos";
-    const ID_PEDIDO = "folio";
-    const ID_CLIENTE = "id_cte";
-    const ID_ESTABLECIMIENTO = "id_estab";
-    const HORA_SOLICITUD = "hora_solicitud";
-    const ESTADO_PEDIDO = "status_pedido";
-    const FORMA_PAGO = "forma_pago";
-    const TOTAL_PEDIDO = "total";*/
-
     const NOMBRE_TABLA = "alimentos";
     const ID_ALIM = "id_alim";
     const NOMBRE_ALIM = "nombre_alim";
@@ -125,9 +115,7 @@ class alimentos
 
             } else {
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_ALIM . "=?";// AND " .
-                    //self::ID_CLIENTE . "=?";
-
+                    " WHERE " . self::ID_ALIM . "=?";
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
                 // Ligar idContacto e idUsuario
