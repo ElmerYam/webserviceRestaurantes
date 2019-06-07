@@ -121,17 +121,17 @@ class alimentos
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
                 // Ligar idUsuario
-                $sentencia->bindParam(1, $idCliente, PDO::PARAM_INT);
+                $sentencia->bindParam(1, $idalimento, PDO::PARAM_INT);
 
             } else {
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_PEDIDO . "=?";// AND " .
+                    " WHERE " . self::ID_ALIM . "=?";// AND " .
                     //self::ID_CLIENTE . "=?";
 
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
                 // Ligar idContacto e idUsuario
-                $sentencia->bindParam(1, $idPedido, PDO::PARAM_INT);
+                $sentencia->bindParam(1, $idalimento, PDO::PARAM_INT);
                 //$sentencia->bindParam(2, $idCliente, PDO::PARAM_INT);
             }
 
@@ -161,7 +161,7 @@ class alimentos
 
     private function crear($alimento)
     {
-        if ($pedido) {
+        if ($alimento) {
             try {
                 $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
                 $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .
@@ -174,7 +174,7 @@ class alimentos
                     self::ID_TIPO_COCINA . "," .
                     self::TIEMPO_MENU . "," .
                     self::FOTO_ALIM . "," .
-                    self:: EXISTENCIA .")" .
+                    self::EXISTENCIA .")" .
                     " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
                 // Preparar la sentencia
@@ -191,16 +191,16 @@ class alimentos
                 $sentencia->bindParam(9, $fotoalim);
                 $sentencia->bindParam(10, $existencia);
 
-                $idalim = $alimento->$id_alim;
-                $nombrealim = $alimento->$nombre_alim;
-                $descripcionalim = $alimento->$descripcion_alim;
-                $umedida = $alimento->$u_medida;
-                $tiempoprep = $alimento->$tiempo_prep;
-                $preciounit = $alimento->$precio_unit;
-                $idtipococina = $alimento->$id_tipo_cocina;
-                $tiempomenu = $alimento->$tiempo_menu;
-                $fotoalim = $alimento->$foto_alim;
-                $existencia = $alimento->$existencia;
+                $idalim = $alimento->id_alim;
+                $nombrealim = $alimento->nombre_alim;
+                $descripcionalim = $alimento->descripcion_alim;
+                $umedida = $alimento->u_medida;
+                $tiempoprep = $alimento->tiempo_prep;
+                $preciounit = $alimento->precio_unit;
+                $idtipococina = $alimento->id_tipo_cocina;
+                $tiempomenu = $alimento->tiempo_menu;
+                $fotoalim = $alimento->foto_alim;
+                $existencia = $alimento->existencia;
 
                 $sentencia->execute();
 
@@ -240,9 +240,10 @@ class alimentos
                 self::PRECIO_UNIT . "=?," .
                 self::ID_TIPO_COCINA. "=?, " .
                 self::TIEMPO_MENU. "=?, " .
-                self::FOTO_ALIM . "=? " .
+                self::FOTO_ALIM . "=?, " .
                 self:: EXISTENCIA ."=? " .
                 " WHERE " . self::ID_ALIM . "=?";
+
 
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
@@ -259,16 +260,16 @@ class alimentos
             $sentencia->bindParam(9, $existencia);
             $sentencia->bindParam(10, $idalim);
 
-            $idalim = $alimento->$id_alim;
-            $nombrealim = $alimento->$nombre_alim;
-            $descripcionalim = $alimento->$descripcion_alim;
-            $umedida = $alimento->$u_medida;
-            $tiempoprep = $alimento->$tiempo_prep;
-            $preciounit = $alimento->$precio_unit;
-            $idtipococina = $alimento->$id_tipo_cocina;
-            $tiempomenu = $alimento->$tiempo_menu;
-            $fotoalim = $alimento->$foto_alim;
-            $existencia = $alimento->$existencia;
+            $idalim = $alimento->id_alim;
+            $nombrealim = $alimento->nombre_alim;
+            $descripcionalim = $alimento->descripcion_alim;
+            $umedida = $alimento->u_medida;
+            $tiempoprep = $alimento->tiempo_prep;
+            $preciounit = $alimento->precio_unit;
+            $idtipococina = $alimento->id_tipo_cocina;
+            $tiempomenu = $alimento->tiempo_menu;
+            $fotoalim = $alimento->foto_alim;
+            $existencia = $alimento->existencia;
 
             // Ejecutar la sentencia
             $sentencia->execute();
