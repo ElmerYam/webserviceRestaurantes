@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 28, 2019 at 03:44 AM
+-- Generation Time: Jun 05, 2019 at 12:04 AM
 -- Server version: 10.1.39-MariaDB
 -- PHP Version: 7.3.5
 
@@ -49,7 +49,8 @@ INSERT INTO `empleado` (`id_empleado`, `nombre_emp`, `primer_apellido_emp`, `seg
 (2, 'juan', 'pepe', 'na', 'jefe', 2, '$2y$10$h.NEezLtdIc9uLn3Zkbml.3kaDx.MMf/dQIXvUA2Yg/wPr/7QLL7K', 'beto@mail', '358e6e5f1325050423113849a0aeb249'),
 (3, 'beto', 'pepe', 'na', 'jefe', 2, '$2y$10$PW.NaKHFaaDZNsaaHEM7Vu74yhMhkuVZdSaDjrTuSx6I13So4AQ8.', 'beto@gmail.com', 'a5367a226eb87f9313c2a86224e50c6f'),
 (4, 'beto', 'pepe', 'na', 'jefe', 2, '$2y$10$CZNOt8Se9YzaXY6M.WmJSOSe6huWSyrNarD9dQet8mODd93YqKc5u', 'beto@gmail.com', 'e4ec3d004587c3d97d8b340ee24c63d3'),
-(5, 'fd', 'pepe', 'na', 'jefe', 2, '$2y$10$tHar8s5lx5nvPrOaBoMYf.dDYzbGN9Z0hw.DgUzw0MSOo4yDoAkBW', 'beto@gmail.com', '94574891ab17f57de133627922df93b6');
+(5, 'fd', 'pepe', 'na', 'jefe', 2, '$2y$10$tHar8s5lx5nvPrOaBoMYf.dDYzbGN9Z0hw.DgUzw0MSOo4yDoAkBW', 'beto@gmail.com', '94574891ab17f57de133627922df93b6'),
+(6, 'leandro', 'ivan', 'tamay', 'gato', 2, '$2y$10$L18HHm6kWe9jPxyIF.e1ZuY/xQSmz.m8WtdoMFXMgH.ZZM9vtdCLu', 'leandro@gmail.com', '31f10dd6b75e11df74053de205fcd30e');
 
 -- --------------------------------------------------------
 
@@ -72,21 +73,11 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`folio`, `id_cte`, `id_estab`, `hora_solicitud`, `status_pedido`, `forma_pago`, `total`) VALUES
-(1, 'c0001', 2, '1300', 'no revisado', 'efectivo', 456.78),
-(2, 'c0001', 2, '1300', 'no revisado', 'efectivo', 456.78),
-(3, 'c0002', 2, '0456', 'confirmado', 'efectivo', 23.45),
-(4, 'c0002', 2, '0456', 'confirmado', 'efectivo', 23.45),
-(5, 'c0001', 1, '12:43', 'no revisado', 'paypal', 234.54),
-(6, 'c0001', 1, '12:43', 'no revisado', 'paypal', 234.54),
-(7, 'c0004', 3, '12:54', 'en preparación', 'debito', 645.87),
-(8, 'c0004', 3, '12:54', 'en preparación', 'debito', 645.87),
-(9, 'c0004', 4, '4:54', 'cancelado', 'credito', 3),
-(10, 'c0004', 4, '4:54', 'cancelado', 'credito', 3),
-(19, 'c0004', 4, '4:54', 'entrega', 'credito', 3),
-(20, 'x', 0, 'x', 'x', 'x', 0),
-(21, 'c0001', 2, '1300', 'no revisado', 'efectivo', 0),
-(22, 'c0004', 3, '12:54', 'en preparación', 'debitorfikjhgfghjkv', 645.87),
-(23, 'FC0122', 1, '12:43', 'pendiente', 'efectivo', 1200);
+(58, '56', 1, '1234', 'pendiete', 'no definida', 1892),
+(64, 'a', 0, 'a', 'a', 'a', 0),
+(65, 'b', 2, 'b', 'b', 'b', 0),
+(66, '56', 1, '1234', 'no definida', '', 1892),
+(67, '', 0, '', '', '', 0);
 
 --
 -- Indexes for dumped tables
@@ -112,13 +103,13 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT for table `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `id_empleado` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_empleado` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

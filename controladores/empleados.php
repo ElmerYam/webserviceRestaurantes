@@ -1,7 +1,7 @@
 <?php
 
 include_once 'datos/ConexionBD.php';
-
+//require_once '../utilidades/nusoap.php';
 class empleados
 {
     // Datos de la tabla "empleado"
@@ -24,7 +24,7 @@ class empleados
     const ESTADO_CLAVE_NO_AUTORIZADA = 5;
     const ESTADO_URL_INCORRECTA = 6;
     const ESTADO_FALLA_DESCONOCIDA = 7;
-    const ESTADO_PARAMETROS_INCORRECTOS = 8;    
+    const ESTADO_PARAMETROS_INCORRECTOS = 8;
 
     public static function post($peticion)
     {
@@ -44,7 +44,7 @@ class empleados
     private function registrar()
     {
         $cuerpo = file_get_contents('php://input');
-        $empleado = json_decode($cuerpo);        
+        $empleado = json_decode($cuerpo);
         $resultado = self::crear($empleado);
 
         switch ($resultado) {
@@ -54,7 +54,7 @@ class empleados
                     [
                         "estado" => self::ESTADO_CREACION_EXITOSA,
                         "mensaje" => utf8_encode("Registro exitoso!")
-                    ];                    
+                    ];
                 break;
             case self::ESTADO_CREACION_FALLIDA:
                 throw new ExcepcionApi(self::ESTADO_CREACION_FALLIDA, "Ha ocurrido un error");
@@ -146,13 +146,13 @@ class empleados
     {
         $respuesta = array();
 
-        $body = file_get_contents('php://input');        
-        $empleado = json_decode($body);        
-        $correo_emp = $empleado->correo_emp;         
-        $password_emp = $empleado->password_emp;        
+        $body = file_get_contents('php://input');
+        $empleado = json_decode($body);
+        $correo_emp = $empleado->correo_emp;
+        $password_emp = $empleado->password_emp;
 
         if (self::autenticar($correo_emp, $password_emp)) {
-            $empleadoBD = self::obtenerUsuarioPorCorreo($correo_emp);            
+            $empleadoBD = self::obtenerUsuarioPorCorreo($correo_emp);
             if ($empleadoBD != NULL) {
                 http_response_code(200);
                 $respuesta["nombre_emp"] = $empleadoBD["nombre_emp"];
@@ -160,8 +160,8 @@ class empleados
                 $respuesta["segundo_apellido_emp"] = $empleadoBD["segundo_apellido_emp"];
                 $respuesta["puesto"] = $empleadoBD["puesto"];
                 $respuesta["id_estab"] = $empleadoBD["id_estab"];
-                $respuesta["password_emp"] = $empleadoBD["password_emp"];                
-                $respuesta["correo_emp"] = $empleadoBD["correo_emp"];                
+                $respuesta["password_emp"] = $empleadoBD["password_emp"];
+                $respuesta["correo_emp"] = $empleadoBD["correo_emp"];
                 $respuesta["claveApi"] = $empleadoBD["claveApi"];
                 return ["estado" => 1, "empleado" => $respuesta];
             } else {
@@ -170,28 +170,28 @@ class empleados
             }
         } else {
             throw new ExcepcionApi(self::ESTADO_PARAMETROS_INCORRECTOS,
-                utf8_encode("Correo o contrasenia invalidos"));                
+                utf8_encode("Correo o contrasenia invalidos"));
         }
     }
 
     private function autenticar($correo_emp, $password_emp)
     {
-        $comando = "SELECT password_emp FROM " . self::NOMBRE_TABLA . " WHERE " . self::CORREO_EMP . "=?";        
+        $comando = "SELECT password_emp FROM " . self::NOMBRE_TABLA . " WHERE " . self::CORREO_EMP . "=?";
         try {
 
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
             $sentencia->bindParam(1, $correo_emp);
-            $sentencia->execute();          
+            $sentencia->execute();
 
             if ($sentencia) {
-                $resultado = $sentencia->fetch();                
+                $resultado = $sentencia->fetch();
 
-                if (self::validarContrasena($password_emp, $resultado["password_emp"])){                    
+                if (self::validarContrasena($password_emp, $resultado["password_emp"])){
                     return true;
-                } else {                    
+                } else {
                     return false;  /// no valida
                 }
-            } else {                
+            } else {
                 return false;
             }
         } catch (PDOException $e) {
@@ -200,8 +200,8 @@ class empleados
     }
 
     private function validarContrasena($password_empPlana, $password_empHash)
-    {                 
-        return password_verify($password_empPlana, $password_empHash);        
+    {
+        return password_verify($password_empPlana, $password_empHash);
     }
 
 
@@ -301,4 +301,3 @@ class empleados
 
 
 }
-

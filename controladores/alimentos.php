@@ -1,16 +1,28 @@
 <?php
 
-class pedidos
+class alimentos
 {
 
-    const NOMBRE_TABLA = "pedidos";
+    /*const NOMBRE_TABLA = "alimentos";
     const ID_PEDIDO = "folio";
     const ID_CLIENTE = "id_cte";
     const ID_ESTABLECIMIENTO = "id_estab";
     const HORA_SOLICITUD = "hora_solicitud";
     const ESTADO_PEDIDO = "status_pedido";
     const FORMA_PAGO = "forma_pago";
-    const TOTAL_PEDIDO = "total";
+    const TOTAL_PEDIDO = "total";*/
+
+    const NOMBRE_TABLA = "alimentos";
+    const ID_ALIM = "id_alim";
+    const NOMBRE_ALIM = "nombre_alim";
+    const DESCRIPCION_ALIM = "descripcion_alim";
+    const U_MEDIDA = "u_medida";
+    const TIEMPO_PREP = "tiempo_prep";
+    const PRECIO_UNIT = "precio_unit";
+    const ID_TIPO_COCINA = "id_tipo_cocina";
+    const TIEMPO_MENU = "tiempo_menu";
+    const FOTO_ALIM = "foto_alim";
+    const EXISTENCIA = "existencia";
 
     const CODIGO_EXITO = 1;
     const ESTADO_EXITO = 1;
@@ -25,7 +37,7 @@ class pedidos
         $idEmpleado = empleados::autorizar();
 
         //si la variable peticion esta vacia
-        if (empty($peticion[0]))                    
+        if (empty($peticion[0]))
             return self::obtenerPedidos($idEmpleado);
         else
             return self::obtenerPedidos($idEmpleado, $peticion[0]);
@@ -36,15 +48,15 @@ class pedidos
     {
         $idEmpleado = empleados::autorizar();
 
-        $body = file_get_contents('php://input');        
-        $pedido = json_decode($body);
-        $id_pedido = pedidos::crear($pedido);
+        $body = file_get_contents('php://input');
+        $alimento = json_decode($body);
+        $id_alimento = alimentos::crear($alimento);
 
         http_response_code(201);
         return [
             "estado" => self::CODIGO_EXITO,
             "mensaje" => "Pedido creado",
-            "id" => $id_pedido
+            "id" => $id_alimento
         ];
 
     }
@@ -54,9 +66,9 @@ class pedidos
         $idEmpleado = empleados::autorizar();
         if (!empty($peticion[0])) {
             $body = file_get_contents('php://input');
-            $pedido = json_decode($body);
+            $alimento = json_decode($body);
 
-            if (self::actualizar($pedido, $peticion[0]) > 0) {
+            if (self::actualizar($alimento, $peticion[0]) > 0) {
                 http_response_code(200);
                 return [
                     "estado" => self::CODIGO_EXITO,
@@ -64,7 +76,7 @@ class pedidos
                 ];
             } else {
                 throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO,
-                    "El contacto al que intentas acceder no existe", 404);
+                    "El producto al que intentas acceder no existe", 404);
             }
         } else {
             throw new ExcepcionApi(self::ESTADO_ERROR_PARAMETROS, "Falta id", 422);
@@ -99,10 +111,10 @@ class pedidos
      * @return array registros de la tabla contacto
      * @throws Exception
      */
-    private function obtenerPedidos($idCliente, $idPedido = NULL)
+    private function obtenerPedidos($idCliente, $idalimento = NULL)
     {
         try {
-            if (!$idPedido) {
+            if (!$idalimento) {
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;
                     //" WHERE " . self::ID_PEDIDO . "=?";
 
@@ -147,39 +159,48 @@ class pedidos
      * @throws ExcepcionApi
      */
 
-    private function crear($pedido)
+    private function crear($alimento)
     {
         if ($pedido) {
             try {
-
                 $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
-
-                // Sentencia INSERT
                 $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .
-                    self::ID_CLIENTE . "," .
-                    self::ID_ESTABLECIMIENTO . "," .
-                    self::HORA_SOLICITUD . "," .
-                    self::ESTADO_PEDIDO . "," .
-                    self::FORMA_PAGO . "," .
-                    self:: TOTAL_PEDIDO .")" .
-                    " VALUES(?,?,?,?,?,?)";
+                    self::ID_ALIM . "," .
+                    self::NOMBRE_ALIM . "," .
+                    self::DESCRIPCION_ALIM . "," .
+                    self::U_MEDIDA . "," .
+                    self::TIEMPO_PREP . "," .
+                    self::PRECIO_UNIT . "," .
+                    self::ID_TIPO_COCINA . "," .
+                    self::TIEMPO_MENU . "," .
+                    self::FOTO_ALIM . "," .
+                    self:: EXISTENCIA .")" .
+                    " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
                 // Preparar la sentencia
                 $sentencia = $pdo->prepare($comando);
 
-                $sentencia->bindParam(1, $idCliente);
-                $sentencia->bindParam(2, $idEstablecimiento);
-                $sentencia->bindParam(3, $hora);
-                $sentencia->bindParam(4, $estado);
-                $sentencia->bindParam(5, $forPago);
-                $sentencia->bindParam(6, $totaPedido);
+                $sentencia->bindParam(1, $idalim);
+                $sentencia->bindParam(2, $nombrealim);
+                $sentencia->bindParam(3, $descripcionalim);
+                $sentencia->bindParam(4, $umedida);
+                $sentencia->bindParam(5, $tiempoprep);
+                $sentencia->bindParam(6, $preciounit);
+                $sentencia->bindParam(7, $idtipococina);
+                $sentencia->bindParam(8, $tiempomenu);
+                $sentencia->bindParam(9, $fotoalim);
+                $sentencia->bindParam(10, $existencia);
 
-                $idCliente = $pedido->id_cte;
-                $idEstablecimiento = $pedido->id_estab;
-                $hora = $pedido->hora_solicitud;
-                $estado = $pedido->status_pedido;
-                $forPago = $pedido->forma_pago;
-                $totaPedido = $pedido->total;
+                $idalim = $alimento->$id_alim;
+                $nombrealim = $alimento->$nombre_alim;
+                $descripcionalim = $alimento->$descripcion_alim;
+                $umedida = $alimento->$u_medida;
+                $tiempoprep = $alimento->$tiempo_prep;
+                $preciounit = $alimento->$precio_unit;
+                $idtipococina = $alimento->$id_tipo_cocina;
+                $tiempomenu = $alimento->$tiempo_menu;
+                $fotoalim = $alimento->$foto_alim;
+                $existencia = $alimento->$existencia;
 
                 $sentencia->execute();
 
@@ -205,41 +226,50 @@ class pedidos
      * @return PDOStatement
      * @throws Exception
      */
-    private function actualizar($pedido, $idPedido)
+    private function actualizar($alimento, $idalimento)
     {
         try {
             // Creando consulta UPDATE
             $consulta = "UPDATE " . self::NOMBRE_TABLA .
                 " SET " .
-                //self::ID_CLIENTE . "=?," .
-                self::ID_ESTABLECIMIENTO . "=?," .
-                self::HORA_SOLICITUD . "=?," .
-                self::ESTADO_PEDIDO . "=?, " .
-                self::FORMA_PAGO . "=?, " .
-                self::TOTAL_PEDIDO . "=? " .
-                " WHERE " . self::ID_PEDIDO . "=? AND " . self::ID_CLIENTE . "=?";
+                //self::ID_ALIM . "=?," .
+                self::NOMBRE_ALIM . "=?," .
+                self::DESCRIPCION_ALIM. "=?, " .
+                self::U_MEDIDA. "=?, " .
+                self::TIEMPO_PREP . "=?," .
+                self::PRECIO_UNIT . "=?," .
+                self::ID_TIPO_COCINA. "=?, " .
+                self::TIEMPO_MENU. "=?, " .
+                self::FOTO_ALIM . "=? " .
+                self:: EXISTENCIA ."=? " .
+                " WHERE " . self::ID_ALIM . "=?";
 
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
 
             //$sentencia->bindParam(1, $idCliente);
-            $sentencia->bindParam(1, $idEstablecimiento);
-            $sentencia->bindParam(2, $hora);
-            $sentencia->bindParam(3, $estado);
-            $sentencia->bindParam(4, $forPago);
-            $sentencia->bindParam(5, $totaPedido);
-            $sentencia->bindParam(6, $idPedido);
-            $sentencia->bindParam(7, $idCliente);
+            $sentencia->bindParam(1, $nombrealim);
+            $sentencia->bindParam(2, $descripcionalim);
+            $sentencia->bindParam(3, $umedida);
+            $sentencia->bindParam(4, $tiempoprep);
+            $sentencia->bindParam(5, $preciounit);
+            $sentencia->bindParam(6, $idtipococina);
+            $sentencia->bindParam(7, $tiempomenu);
+            $sentencia->bindParam(8, $fotoalim);
+            $sentencia->bindParam(9, $existencia);
+            $sentencia->bindParam(10, $idalim);
 
+            $idalim = $alimento->$id_alim;
+            $nombrealim = $alimento->$nombre_alim;
+            $descripcionalim = $alimento->$descripcion_alim;
+            $umedida = $alimento->$u_medida;
+            $tiempoprep = $alimento->$tiempo_prep;
+            $preciounit = $alimento->$precio_unit;
+            $idtipococina = $alimento->$id_tipo_cocina;
+            $tiempomenu = $alimento->$tiempo_menu;
+            $fotoalim = $alimento->$foto_alim;
+            $existencia = $alimento->$existencia;
 
-            $idCliente = $pedido->id_cliente;
-            $idEstablecimiento = $pedido->id_estab;
-            $hora = $pedido->hora_solicitud;
-            $estado = $pedido->status_pedido;
-            $forPago = $pedido->forma_pago;
-            $totaPedido = $pedido->total;
-            //$idPedido = $pedido->id_pedido;
-            
             // Ejecutar la sentencia
             $sentencia->execute();
 
@@ -263,7 +293,7 @@ class pedidos
         try {
             // Sentencia DELETE
             $comando = "DELETE FROM " . self::NOMBRE_TABLA .
-                " WHERE " . self::ID_PEDIDO . "=? ";
+                " WHERE " . self::ID_ALIM . "=? ";
 
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
@@ -280,4 +310,3 @@ class pedidos
         }
     }
 }
-

@@ -6,6 +6,7 @@ require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
 require 'utilidades/ExceptionApi.php';
 
+//require_once 'nusoap.php'; // SOAP
 // Constantes de estado
 const ESTADO_URL_INCORRECTA = 2;
 const ESTADO_EXISTENCIA_RECURSO = 3;
@@ -33,19 +34,19 @@ set_exception_handler(function ($exception) use ($vista) {
         $vista->estado = $exception->getCode();
     } else {
         $vista->estado = 500;
-    }    
+    }
     $vista->imprimir($cuerpo);
 }
 );
 
 // Extraer segmento de la url
 if (isset($_GET['PATH_INFO']))
-    $peticion = explode('/', $_GET['PATH_INFO']);    
+    $peticion = explode('/', $_GET['PATH_INFO']);
 else
     throw new ExceptionApi(ESTADO_URL_INCORRECTA, utf8_encode("No se reconoce la petición"));
 
 // Obtener recurso
-$recurso = array_shift($peticion);  
+$recurso = array_shift($peticion);
 $recursos_existentes = array('pedidos', 'empleados');
 
 // Comprobar si existe el recurso
@@ -57,12 +58,12 @@ if (!in_array($recurso, $recursos_existentes)) {
 $metodo = strtolower($_SERVER['REQUEST_METHOD']);
 
 // Filtrar método
-switch ($metodo) {    
-    case 'get':        
-    case 'post':    
-    case 'put':    
-    case 'delete':    
-        if (method_exists($recurso, $metodo)) {            
+switch ($metodo) {
+    case 'get':
+    case 'post':
+    case 'put':
+    case 'delete':
+        if (method_exists($recurso, $metodo)) {
             $respuesta = call_user_func(array($recurso, $metodo), $peticion);
             $vista->imprimir($respuesta);
             break;
@@ -76,5 +77,4 @@ switch ($metodo) {
         ];
         $vista->imprimir($cuerpo);
 }
-
-
+?>
