@@ -4,6 +4,7 @@ class alimentos
 {
     const NOMBRE_TABLA = "alimentos";
     const ID_ALIM = "id_alim";
+    const ID_ESTAB = "id_estab";
     const NOMBRE_ALIM = "nombre_alim";
     const DESCRIPCION_ALIM = "descripcion_alim";
     const U_MEDIDA = "u_medida";
@@ -27,6 +28,7 @@ class alimentos
         $idEmpleado = empleados::autorizar();
 
         //si la variable peticion esta vacia
+
         if (empty($peticion[0]))
             return self::obtenerPedidos($idEmpleado);
         else
@@ -101,25 +103,22 @@ class alimentos
      * @return array registros de la tabla contacto
      * @throws Exception
      */
-    private function obtenerPedidos($idCliente, $idalimento = NULL)
-    {
-        try {
+    private function obtenerPedidos($idEmpleado, $idalimento = NULL)
+    {        
+        try {                        
             if (!$idalimento) {
-                $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;
-                    //" WHERE " . self::ID_PEDIDO . "=?";
+                $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;                   
 
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
-                // Ligar idUsuario
-                $sentencia->bindParam(1, $idalimento, PDO::PARAM_INT);
 
-            } else {
+            } else {                
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_ALIM . "=?";
+                    " WHERE " . self::ID_ALIM . "=" . "'" . $idalimento . "'";
                 // Preparar sentencia
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
-                // Ligar idContacto e idUsuario
-                $sentencia->bindParam(1, $idalimento, PDO::PARAM_INT);
+                // Ligar idContacto e idUsuario                
+                //$sentencia->bindParam(1, $idalimento, PDO::PARAM_INT);
                 //$sentencia->bindParam(2, $idCliente, PDO::PARAM_INT);
             }
 
@@ -154,6 +153,7 @@ class alimentos
                 $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
                 $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .
                     self::ID_ALIM . "," .
+                    self::ID_ESTAB . "," .
                     self::NOMBRE_ALIM . "," .
                     self::DESCRIPCION_ALIM . "," .
                     self::U_MEDIDA . "," .
@@ -163,32 +163,22 @@ class alimentos
                     self::TIEMPO_MENU . "," .
                     self::FOTO_ALIM . "," .
                     self::EXISTENCIA .")" .
-                    " VALUES(?,?,?,?,?,?,?,?,?,?)";
+                    " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
                 // Preparar la sentencia
                 $sentencia = $pdo->prepare($comando);
 
-                $sentencia->bindParam(1, $idalim);
-                $sentencia->bindParam(2, $nombrealim);
-                $sentencia->bindParam(3, $descripcionalim);
-                $sentencia->bindParam(4, $umedida);
-                $sentencia->bindParam(5, $tiempoprep);
-                $sentencia->bindParam(6, $preciounit);
-                $sentencia->bindParam(7, $idtipococina);
-                $sentencia->bindParam(8, $tiempomenu);
-                $sentencia->bindParam(9, $fotoalim);
-                $sentencia->bindParam(10, $existencia);
-
-                $idalim = $alimento->id_alim;
-                $nombrealim = $alimento->nombre_alim;
-                $descripcionalim = $alimento->descripcion_alim;
-                $umedida = $alimento->u_medida;
-                $tiempoprep = $alimento->tiempo_prep;
-                $preciounit = $alimento->precio_unit;
-                $idtipococina = $alimento->id_tipo_cocina;
-                $tiempomenu = $alimento->tiempo_menu;
-                $fotoalim = $alimento->foto_alim;
-                $existencia = $alimento->existencia;
+                $sentencia->bindParam(1, $alimento->id_alim);
+                $sentencia->bindParam(2, $alimento->id_estab);
+                $sentencia->bindParam(3, $alimento->nombre_alim);
+                $sentencia->bindParam(4, $alimento->descripcion_alim);
+                $sentencia->bindParam(5, $alimento->u_medida);
+                $sentencia->bindParam(6, $alimento->tiempo_prep);
+                $sentencia->bindParam(7, $alimento->precio_unit);
+                $sentencia->bindParam(8, $alimento->id_tipo_cocina);
+                $sentencia->bindParam(9, $alimento->tiempo_menu);
+                $sentencia->bindParam(10, $alimento->foto_alim);
+                $sentencia->bindParam(11, $alimento->existencia);                
 
                 $sentencia->execute();
 
@@ -287,8 +277,7 @@ class alimentos
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
 
-            $sentencia->bindParam(1, $idPedido);
-          //  $sentencia->bindParam(2, $idCliente);
+            $sentencia->bindParam(1, $idPedido);          
 
             $sentencia->execute();
 

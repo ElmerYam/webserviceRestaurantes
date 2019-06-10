@@ -1,5 +1,5 @@
 <?php
-
+require 'controladores/publicidad.php';
 require 'controladores/empleados.php';
 require 'controladores/clientes.php';
 require 'controladores/pedidos.php';
@@ -51,11 +51,12 @@ else
 // Obtener recurso
 $recurso = array_shift($peticion);
 $recursos_existentes = array(
-  'pedidos',
-  'empleados',
-  'alimentos',
-  'tiposCocina',
-  'clientes'
+    'pedidos',
+    'empleados',
+    'alimentos', 
+    'tiposCocina',
+    'clientes',
+    'publicidad'
 );
 
 // Comprobar si existe el recurso

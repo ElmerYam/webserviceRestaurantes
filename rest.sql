@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 07, 2019 at 05:43 PM
+-- Generation Time: Jun 10, 2019 at 05:19 PM
 -- Server version: 10.1.39-MariaDB
 -- PHP Version: 7.3.5
 
@@ -34,12 +34,22 @@ CREATE TABLE `alimentos` (
   `descripcion_alim` text COLLATE utf8_spanish_ci NOT NULL,
   `u_medida` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `tiempo_prep` int(3) NOT NULL,
-  `precio_unit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `precio_unit` float NOT NULL,
   `id_tipo_cocina` int(10) NOT NULL,
   `tiempo_menu` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `foto_alim` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `existencia` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Dumping data for table `alimentos`
+--
+
+INSERT INTO `alimentos` (`id_alim`, `nombre_alim`, `descripcion_alim`, `u_medida`, `tiempo_prep`, `precio_unit`, `id_tipo_cocina`, `tiempo_menu`, `foto_alim`, `existencia`) VALUES
+('HAM02', 'Hamburguesa ', 'Hamburguesa', 'unidad', 10, 35, 1, 'Plato fuerte', './assets/img/hamburguesa.jpg', 20),
+('PAS435', 'Pasta bolognesa', 'Contiene carne de res molida, un toque de picante, especias de la región de Turquía,  y otras cosas mas.', 'Orden', 90, 300, 3, 'Entremes', './assets/img/hamburguesa.jpg', 4),
+('PIZ02', 'Pizza vegetariana', 'Pizza elaborada únicamente con vegetales selectos de la región.', 'pieza', 20, 345.65, 1, 'Plato fuerte', './assets/img/vacio.jpg', 2),
+('PIZ23', 'Pizza mejiqueña', 'Pizza elaborada únicamente con vegetales selectos de la región.', 'Pieza', 20, 256.87, 2, 'Plato fuerte', './assets/img/vacio.jpg', 2);
 
 -- --------------------------------------------------------
 
@@ -103,13 +113,10 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`id_empleado`, `nombre_emp`, `primer_apellido_emp`, `segundo_apellido_emp`, `puesto`, `id_estab`, `password_emp`, `correo_emp`, `claveApi`) VALUES
-(1, 'juan', 'pepe', 'na', 'jefe', 2, '$2y$10$0', 'beto@mail', '594a2f88be6423381cb3c5f3cf6f248f'),
-(2, 'juan', 'pepe', 'na', 'jefe', 2, '$2y$10$h.NEezLtdIc9uLn3Zkbml.3kaDx.MMf/dQIXvUA2Yg/wPr/7QLL7K', 'beto@mail', '358e6e5f1325050423113849a0aeb249'),
-(3, 'beto', 'pepe', 'na', 'jefe', 2, '$2y$10$PW.NaKHFaaDZNsaaHEM7Vu74yhMhkuVZdSaDjrTuSx6I13So4AQ8.', 'beto@gmail.com', 'a5367a226eb87f9313c2a86224e50c6f'),
-(4, 'beto', 'pepe', 'na', 'jefe', 2, '$2y$10$CZNOt8Se9YzaXY6M.WmJSOSe6huWSyrNarD9dQet8mODd93YqKc5u', 'beto@gmail.com', 'e4ec3d004587c3d97d8b340ee24c63d3'),
-(5, 'fd', 'pepe', 'na', 'jefe', 2, '$2y$10$tHar8s5lx5nvPrOaBoMYf.dDYzbGN9Z0hw.DgUzw0MSOo4yDoAkBW', 'beto@gmail.com', '94574891ab17f57de133627922df93b6'),
-(6, 'leandro', 'ivan', 'tamay', 'gato', 2, '$2y$10$L18HHm6kWe9jPxyIF.e1ZuY/xQSmz.m8WtdoMFXMgH.ZZM9vtdCLu', 'leandro@gmail.com', '31f10dd6b75e11df74053de205fcd30e'),
-(7, 'antonia', 'aguilar', 'america', 'jefe', 2, '$2y$10$wWPYnHkr0QLl85XO/FC3O.JaZpWCg6LsejyyEmqvMmbGGUaiKR0oW', 'antonia@gmail.com', '290a4d77d330cbd57017d90a6c100773');
+(8, 'alberto', 'perez', 'mendez', 'cajero', 1, '$2y$10$20dkaWxSELReVKX2PAec0uUzAIS4HNxTqr/CC453Gvx7Z2yip2Nie', 'alberto@gmail.com', '03ba212ca774e05399b4b331b537efa2'),
+(9, 'leandro', 'perez', 'mendez', 'cajero', 1, '$2y$10$oH5szXaqfBmbxlciRCkPxuy9EZGajGJ5dk3XZYIu0Esv8SQ4vkkK6', 'leandro@gmail.com', '7cb309447c89d035a2a6f6be18615653'),
+(10, 'elmer', 'perez', 'mendez', 'cajero', 1, '$2y$10$nxj59JVoWl7OBLzGCes3yev8hksGnBX6Jv2/LQYVhiZcZJ/r/Wdu.', 'elmer@gmail.com', 'fd16a1363b7547fb011cb6f32abd728d'),
+(11, 'alexis', 'perez', 'mendez', 'cajero', 1, '$2y$10$3aPyATtdM8CGavfRwTj2SuZ5Fk6dirq40w6j/J/QKwMXFwwS/xUHS', 'alexis@gmail.com', '25a893dcd1cc55b8d9bbc630cce92b84');
 
 -- --------------------------------------------------------
 
@@ -161,8 +168,11 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`folio`, `id_cte`, `id_estab`, `hora_solicitud`, `status_pedido`, `forma_pago`, `total`) VALUES
-(58, 56, 1, '1234', 'pendiete', 'no definida', 1892),
-(66, 56, 1, '1234', 'no definida', '', 1892);
+(58, 23, 2, '23', 'fish', 'fish', 45),
+(67, 23, 2, '23', 'fish-sa', 'fish-sa', 45),
+(102, 23, 2, '23', 'nofish', 'fish', 45),
+(103, 23, 2, '23', 'nofish', 'nofish', 45),
+(104, 12, 0, 'a', 'pendiente', 'efectivo', 9);
 
 -- --------------------------------------------------------
 
@@ -171,7 +181,8 @@ INSERT INTO `pedidos` (`folio`, `id_cte`, `id_estab`, `hora_solicitud`, `status_
 --
 
 CREATE TABLE `publicidad` (
-  `id_pub` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+  `id_pub` int(10) NOT NULL,
+  `id_estab` int(5) NOT NULL,
   `nombre_pub` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `imagen_pub` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `descripcion_pub` text COLLATE utf8_spanish_ci NOT NULL,
@@ -283,7 +294,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT for table `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `id_empleado` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_empleado` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `establecimientos`
@@ -295,7 +306,13 @@ ALTER TABLE `establecimientos`
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+
+--
+-- AUTO_INCREMENT for table `publicidad`
+--
+ALTER TABLE `publicidad`
+  MODIFY `id_pub` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tipo_cocina`

@@ -1,17 +1,15 @@
 <?php
 
-class pedidos
+class publicidad
 {
-
-    const NOMBRE_TABLA = "pedidos";
-    const ID_PEDIDO = "folio";
-    const ID_CLIENTE = "id_cte";
-    const ID_ESTABLECIMIENTO = "id_estab";
-    const HORA_SOLICITUD = "hora_solicitud";
-    const ESTADO_PEDIDO = "status_pedido";
-    const FORMA_PAGO = "forma_pago";
-    const TOTAL_PEDIDO = "total";
-
+    const NOMBRE_TABLA = "publicidad";
+    const ID_PUB = "id_pub";
+    const ID_ESTAB = "id_estab";
+    const NOMBRE_PUB = "nombre_pub";
+    const IMAGEN_PUB = "imagen_pub";
+    const DESCRIPCION_PUB = "descripcion_pub";
+    const PRODUCTOS_PUB = "productos_pub";
+    
     const CODIGO_EXITO = 1;
     const ESTADO_EXITO = 1;
     const ESTADO_ERROR = 2;
@@ -25,10 +23,11 @@ class pedidos
         $idEmpleado = empleados::autorizar();
 
         //si la variable peticion esta vacia
-        if (empty($peticion[0]))                    
-            return self::obtenerPedidos($idEmpleado);
+
+        if (empty($peticion[0]))
+            return self::obtenerPublicidad($idEmpleado);
         else
-            return self::obtenerPedidos($idEmpleado, $peticion[0]);
+            return self::obtenerPublicidad($idEmpleado, $peticion[0]);
 
     }
 
@@ -36,15 +35,15 @@ class pedidos
     {
         $idEmpleado = empleados::autorizar();
 
-        $body = file_get_contents('php://input');        
-        $pedido = json_decode($body);
-        $id_pedido = pedidos::crear($pedido);
+        $body = file_get_contents('php://input');
+        $publicidad = json_decode($body);
+        $id_pub = publicidad::crear($publicidad);
 
         http_response_code(201);
         return [
             "estado" => self::CODIGO_EXITO,
-            "mensaje" => "Pedido creado",
-            "id" => $id_pedido
+            "mensaje" => "Promoción registrada exitósamente",
+            "id" => $id_pub
         ];
 
     }
@@ -54,9 +53,9 @@ class pedidos
         $idEmpleado = empleados::autorizar();
         if (!empty($peticion[0])) {
             $body = file_get_contents('php://input');
-            $pedido = json_decode($body);
+            $publicidad = json_decode($body);
 
-            if (self::actualizar($pedido, $peticion[0]) > 0) {
+            if (self::actualizar($publicidad, $peticion[0]) > 0) {
                 http_response_code(200);
                 return [
                     "estado" => self::CODIGO_EXITO,
@@ -64,7 +63,7 @@ class pedidos
                 ];
             } else {
                 throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO,
-                    "El folio al que intentas acceder no existe", 404);
+                    "No existe ninguna publicidad con esta ID", 404);
             }
         } else {
             throw new ExcepcionApi(self::ESTADO_ERROR_PARAMETROS, "Falta id", 422);
@@ -99,28 +98,17 @@ class pedidos
      * @return array registros de la tabla contacto
      * @throws Exception
      */
-    private function obtenerPedidos($idCliente, $idPedido = NULL)
-    {
-        try {
-            if (!$idPedido) {
-                $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;
-                    //" WHERE " . self::ID_PEDIDO . "=?";
-
-                // Preparar sentencia
+    private function obtenerPublicidad($idEmpleado, $idpublicidad = NULL)
+    {        
+        try {                        
+            if (!$idpublicidad) {
+                $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;                                   
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
-                // Ligar idUsuario
-                $sentencia->bindParam(1, $idCliente, PDO::PARAM_INT);
-
-            } else {
-                $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_PEDIDO . "=?";// AND " .
-                    //self::ID_CLIENTE . "=?";
-
-                // Preparar sentencia
-                $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
-                // Ligar idContacto e idUsuario
-                $sentencia->bindParam(1, $idPedido, PDO::PARAM_INT);
-                //$sentencia->bindParam(2, $idCliente, PDO::PARAM_INT);
+            } else{                
+                    $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
+                    " WHERE " . self::ID_PUB . "=?";                    
+                $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);                
+                $sentencia->bindParam(1, $idpublicidad, PDO::PARAM_INT);
             }
 
             // Ejecutar sentencia preparada
@@ -147,43 +135,26 @@ class pedidos
      * @throws ExcepcionApi
      */
 
-    private function crear($pedido)
+    private function crear($publicidad)
     {
-        if ($pedido) {
+        if ($publicidad) {
             try {
-
                 $pdo = ConexionBD::obtenerInstancia()->obtenerBD();
-
-                // Sentencia INSERT
-                $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .
-                    self::ID_CLIENTE . "," .
-                    self::ID_ESTABLECIMIENTO . "," .
-                    self::HORA_SOLICITUD . "," .
-                    self::ESTADO_PEDIDO . "," .
-                    self::FORMA_PAGO . "," .
-                    self:: TOTAL_PEDIDO .")" .
-                    " VALUES(?,?,?,?,?,?)";
-
-                // Preparar la sentencia
+                $comando = "INSERT INTO " . self::NOMBRE_TABLA . " ( " .                    
+                    self::ID_ESTAB . "," .
+                    self::NOMBRE_PUB . "," .
+                    self::IMAGEN_PUB . "," .
+                    self::DESCRIPCION_PUB . "," .
+                    self::PRODUCTOS_PUB . ")" .                                    
+                    " VALUES(?,?,?,?,?)";                
                 $sentencia = $pdo->prepare($comando);
-
-                $sentencia->bindParam(1, $idCliente);
-                $sentencia->bindParam(2, $idEstablecimiento);
-                $sentencia->bindParam(3, $hora);
-                $sentencia->bindParam(4, $estado);
-                $sentencia->bindParam(5, $forPago);
-                $sentencia->bindParam(6, $totaPedido);
-
-                $idCliente = $pedido->id_cte;
-                $idEstablecimiento = $pedido->id_estab;
-                $hora = $pedido->hora_solicitud;
-                $estado = $pedido->status_pedido;
-                $forPago = $pedido->forma_pago;
-                $totaPedido = $pedido->total;
-
+                $sentencia->bindParam(1, $publicidad->id_estab);
+                $sentencia->bindParam(2, $publicidad->nombre_pub);
+                $sentencia->bindParam(3, $publicidad->imagen_pub);
+                $sentencia->bindParam(4, $publicidad->descripcion_pub);
+                $sentencia->bindParam(5, $publicidad->productos_pub);
                 $sentencia->execute();
 
-                // Retornar en el último id insertado
                 return $pdo->lastInsertId();
 
             } catch (PDOException $e) {
@@ -205,41 +176,27 @@ class pedidos
      * @return PDOStatement
      * @throws Exception
      */
-    private function actualizar($pedido, $idPedido)
+    private function actualizar($publicidad, $idpublicidad)
     {
         try {
             // Creando consulta UPDATE
             $consulta = "UPDATE " . self::NOMBRE_TABLA .
-                " SET " .
-                self::ID_CLIENTE . "=?," .
-                self::ID_ESTABLECIMIENTO . "=?," .
-                self::HORA_SOLICITUD . "=?," .
-                self::ESTADO_PEDIDO . "=?, " .
-                self::FORMA_PAGO . "=?, " .
-                self::TOTAL_PEDIDO . "=? " .
-                " WHERE " . self::ID_PEDIDO . "=?";//" AND " . self::ID_CLIENTE . "=?";
-
+                " SET " .                
+                self::NOMBRE_PUB. "=?, " .
+                self::IMAGEN_PUB. "=?, " .
+                self::DESCRIPCION_PUB . "=?," .
+                self::PRODUCTOS_PUB . "=?" .                
+                " WHERE " . self::ID_PUB . "=?";
+                
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($consulta);
 
-            $sentencia->bindParam(1, $idCliente);
-            $sentencia->bindParam(2, $idEstablecimiento);
-            $sentencia->bindParam(3, $hora);
-            $sentencia->bindParam(4, $estado);
-            $sentencia->bindParam(5, $forPago);
-            $sentencia->bindParam(6, $totaPedido);
-            $sentencia->bindParam(7, $idPedido);
-            //$sentencia->bindParam(7, $idCliente);
+            $sentencia->bindParam(1, $publicidad->nombre_pub);
+            $sentencia->bindParam(2, $publicidad->imagen_pub);
+            $sentencia->bindParam(3, $publicidad->descripcion_pub);
+            $sentencia->bindParam(4, $publicidad->productos_pub);
+            $sentencia->bindParam(5, $idpublicidad);
 
-
-            $idCliente = $pedido->id_cte;
-            $idEstablecimiento = $pedido->id_estab;
-            $hora = $pedido->hora_solicitud;
-            $estado = $pedido->status_pedido;
-            $forPago = $pedido->forma_pago;
-            $totaPedido = $pedido->total;
-            //$idPedido = $pedido->id_pedido;
-            
             // Ejecutar la sentencia
             $sentencia->execute();
 
@@ -258,17 +215,17 @@ class pedidos
      * @return bool true si la eliminación se pudo realizar, en caso contrario false
      * @throws Exception excepcion por errores en la base de datos
      */
-    private function eliminar($idCliente, $idPedido)
+    private function eliminar($idCliente, $idpublicidad)
     {
         try {
             // Sentencia DELETE
             $comando = "DELETE FROM " . self::NOMBRE_TABLA .
-                " WHERE " . self::ID_PEDIDO . "=? ";
+                " WHERE " . self::ID_PUB . "=? ";
 
             // Preparar la sentencia
             $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
 
-            $sentencia->bindParam(1, $idPedido);
+            $sentencia->bindParam(1, $idpublicidad);
           //  $sentencia->bindParam(2, $idCliente);
 
             $sentencia->execute();
@@ -280,4 +237,3 @@ class pedidos
         }
     }
 }
-
