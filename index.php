@@ -1,5 +1,6 @@
 <?php
 require 'controladores/publicidad.php';
+require 'controladores/tiposRestaurantes.php';
 require 'controladores/empleados.php';
 require 'controladores/clientes.php';
 require 'controladores/pedidos.php';
@@ -60,7 +61,8 @@ $recursos_existentes = array(
     'clientes',
     'publicidad',
     'detallePedido',
-    'establecimientos'
+    'establecimientos',
+    'tiposRestaurantes'
 );
 
 // Comprobar si existe el recurso
