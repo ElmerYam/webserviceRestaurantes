@@ -9,6 +9,7 @@ require 'vistas/VistaXML.php';
 require 'vistas/VistaJson.php';
 require 'utilidades/ExceptionApi.php';
 require 'controladores/detallePedido.php';
+require 'controladores/establecimientos.php';
 
 //require_once 'nusoap.php'; // SOAP
 // Constantes de estado
@@ -58,7 +59,8 @@ $recursos_existentes = array(
     'tiposCocina',
     'clientes',
     'publicidad',
-    'detallePedido'
+    'detallePedido',
+    'establecimientos'
 );
 
 // Comprobar si existe el recurso
