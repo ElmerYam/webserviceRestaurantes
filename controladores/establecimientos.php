@@ -28,15 +28,16 @@ class establecimientos
     const ESTADO_ERROR_BD = 3;
     const ESTADO_ERROR_PARAMETROS = 4;
     const ESTADO_NO_ENCONTRADO = 5;
+
     public static function get($peticion)
     {
         //consulta si el usuario tiene una clave de poder hacer cambios
         $idEmpleado = empleados::autorizar();
         //si la variable peticion esta vacia
         if (empty($peticion[0]))
-            return self::obtenerPedidos($idEmpleado);
+            return self::obtenerEstablecimientos($idEmpleado);
         else
-            return self::obtenerPedidos($idEmpleado, $peticion[0]);
+            return self::obtenerEstablecimientos($idEmpleado, $peticion[0]);
     }
     public static function post($peticion) //------------------post
     {
@@ -47,7 +48,7 @@ class establecimientos
         http_response_code(201);
         return [
             "estado" => self::CODIGO_EXITO,
-            "mensaje" => "Pedido creado",
+            "mensaje" => "Establecimiento creado",
             "id" => $id_establecimiento
         ];
     }
@@ -65,7 +66,7 @@ class establecimientos
                 ];
             } else {
                 throw new ExcepcionApi(self::ESTADO_NO_ENCONTRADO,
-                    "El producto al que intentas acceder no existe", 404);
+                    "El establecimiento al que intentas acceder no existe", 404);
             }
         } else {
             throw new ExcepcionApi(self::ESTADO_ERROR_PARAMETROS, "Falta id", 422);
@@ -96,7 +97,7 @@ class establecimientos
      * @return array registros de la tabla contacto
      * @throws Exception
      */
-    private function obtenerPedidos($idEmpleado, $idestablecimiento = NULL)
+    private function obtenerEstablecimientos($idEmpleado, $idestablecimiento = NULL)
     {        
         try {                        
             if (!$idestablecimiento) {
@@ -268,15 +269,14 @@ class establecimientos
      * @return bool true si la eliminación se pudo realizar, en caso contrario false
      * @throws Exception excepcion por errores en la base de datos
      */
-    private function eliminar( $idPedido)
+    private function eliminar( $idEmpleado ,$idEstab)
     {
         try {
             // Sentencia DELETE
             $comando = "DELETE FROM " . self::NOMBRE_TABLA .
-                " WHERE " . self::ID_ESTAB . "=? ";
+                " WHERE " . self::ID_ESTAB . "=" . $idEstab;
             // Preparar la sentencia
-            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
-            $sentencia->bindParam(1, $idPedido);          
+            $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);       
             $sentencia->execute();
             return $sentencia->rowCount();
         } catch (PDOException $e) {
