@@ -154,6 +154,7 @@ class empleados
             $empleadoBD = self::obtenerUsuarioPorCorreo($correo_emp);
             if ($empleadoBD != NULL) {
                 http_response_code(200);
+                $respuesta["id_empleado"] = $empleadoBD["id_empleado"];
                 $respuesta["nombre_emp"] = $empleadoBD["nombre_emp"];
                 $respuesta["primer_apellido_emp"] = $empleadoBD["primer_apellido_emp"];
                 $respuesta["segundo_apellido_emp"] = $empleadoBD["segundo_apellido_emp"];
@@ -206,6 +207,7 @@ class empleados
 
     private function obtenerUsuarioPorCorreo($correo_emp){
         $comando = "SELECT " .
+            self::ID_EMPLEADO . ",".
             self::NOMBRE_EMP . "," .
             self::PRIMER_APELLIDO_EMP . "," .
             self::SEGUNDO_APELLIDO_EMP . "," .

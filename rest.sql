@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 12, 2019 at 04:02 AM
+-- Generation Time: Jun 12, 2019 at 09:39 PM
 -- Server version: 10.1.39-MariaDB
 -- PHP Version: 7.3.5
 
@@ -37,7 +37,7 @@ CREATE TABLE `alimentos` (
   `precio_unit` float NOT NULL,
   `id_tipo_cocina` int(10) NOT NULL,
   `tiempo_menu` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
-  `foto_alim` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `foto_alim` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `existencia` int(3) NOT NULL,
   `id_estab` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -47,15 +47,15 @@ CREATE TABLE `alimentos` (
 --
 
 INSERT INTO `alimentos` (`id_alim`, `nombre_alim`, `descripcion_alim`, `u_medida`, `tiempo_prep`, `precio_unit`, `id_tipo_cocina`, `tiempo_menu`, `foto_alim`, `existencia`, `id_estab`) VALUES
-('CAR76', 'Sirloin fino', 'Corte grueso con especias regionales', 'pieza', 10, 43.87, 4, 'Botana', '/assets/imagenes/etc/etc/imagen2.png', 2, 6),
-('CEV86t', 'ceviche de camarones clasico', 'Incluye aguacate, cebolla, camarón rosado, y caracoles', 'orden', 15, 438.87, 4, 'Botana', '/assets/imagenes/etc/etc/imagen2.png', 2, 11),
-('HAM02', 'e ', 'e', 'e', 10, 3566, 1, 'Plato fuerte', '/e', 20, 0),
-('HAM12', 'Hamburguesa vegetariana', 'Pizza elaborada únicamente con vegetales selectos de la región.', 'pieza', 20, 256.87, 1, 'Plato fuerte', '/assets/imagenes/etc/etc/imagen2.png', 2, 2),
+('CAR76', 'Sirloin fino', 'Corte grueso con especias regionales', 'pieza', 10, 43.87, 4, 'Botana', './assets/img/hamburguesa.jpg', 2, 6),
+('CEV86t', 'ceviche de camarones clasico', 'Incluye aguacate, cebolla, camarón rosado, y caracoles', 'orden', 15, 438.87, 4, 'Botana', './assets/img/hamburguesa.jpg', 2, 11),
+('HAM02', 'e ', 'e', 'e', 10, 3566, 1, 'Plato fuerte', './assets/img/hamburguesa.jpg', 20, 0),
+('HAM12', 'Hamburguesa vegetariana', 'Pizza elaborada únicamente con vegetales selectos de la región.', 'pieza', 20, 256.87, 1, 'Plato fuerte', './assets/img/hamburguesa.jpg', 2, 2),
 ('PAS435', 'Pasta bolognesa', 'Contiene carne de res molida, un toque de picante, especias de la región de Turquía,  y otras cosas mas.', 'Orden', 90, 300, 3, 'Entremes', './assets/img/hamburguesa.jpg', 4, 0),
 ('PIZ02', 'Pizza vegetariana', 'Pizza elaborada únicamente con vegetales selectos de la región.', 'pieza', 20, 345.65, 1, 'Plato fuerte', './assets/img/vacio.jpg', 2, 0),
-('PIZ56', 'Pizza de camaron', 'Con camaroncitos bien fritos', 'pieza', 10, 43.87, 4, 'Botana', '/assets/imagenes/etc/etc/imagen2.png', 2, 3),
+('PIZ56', 'Pizza de camaron', 'Con camaroncitos bien fritos', 'pieza', 10, 43.87, 4, 'Botana', 'https://firebasestorage.googleapis.com/v0/b/ionic-u4.appspot.com/o/hamburguesa.jpg?alt=media&token=1b44534b-eb4f-40a9-bf2f-66c075dc7314', 2, 3),
 ('TAC12', 'Tacos al pastor', 'Tacos al pastor con queso.', 'pieza', 10, 23.87, 2, 'Plato fuerte', '/assets/imagenes/etc/etc/imagen2.png', 2, 3),
-('TOR32', 'Torta milanesa', 'Tacos al pastor con queso.', 'pieza', 10, 43.87, 4, 'Plato fuerte', '/assets/imagenes/etc/etc/imagen2.png', 2, 3);
+('TOR32', 'Torta milanesa', 'Tacos al pastor con queso.', 'pieza', 10, 43.87, 4, 'Plato fuerte', './assets/img/hamburguesa.jpg', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -164,8 +164,8 @@ CREATE TABLE `establecimientos` (
   `calificacion` int(3) NOT NULL,
   `id_tipo_rest` int(10) NOT NULL,
   `ubicacion_gps_estab` point DEFAULT NULL,
-  `foto_estab` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `logo_estab` varchar(100) COLLATE utf8_spanish_ci NOT NULL
+  `foto_estab` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `logo_estab` varchar(255) COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
@@ -173,7 +173,7 @@ CREATE TABLE `establecimientos` (
 --
 
 INSERT INTO `establecimientos` (`id_estab`, `nombre_estab`, `num_exterior_estab`, `calle_estab`, `cruzamiento1_calle_estab`, `cruzamiento2_calle_estab`, `colonia_estab`, `ciudad_estab`, `telefono_estab`, `correo_estab`, `horarios`, `descripcion_estab`, `id_tipo_cocina`, `serv_domicilio`, `serv_reserv`, `calificacion`, `id_tipo_rest`, `ubicacion_gps_estab`, `foto_estab`, `logo_estab`) VALUES
-(9, 'tacoloco', '34-A', 'Independencia', 'Efrain Aguilar', 'Mahatma Ghandi', 'centro', 'Chetumal', '98765432', 'loco@mail.com', 'todos los dias', 'Un lugar agradable', 1, 1, 1, 50, 1, NULL, 'vacio', 'vacio'),
+(9, 'tacoloco', '34-A', 'Independencia', 'Efrain Aguilar', 'Mahatma Ghandi', 'centro', 'Chetumal', '98765432', 'loco@mail.com', 'todos los dias', 'Un lugar agradable', 1, 1, 1, 50, 1, NULL, 'https://firebasestorage.googleapis.com/v0/b/chatonline-8b1db.appspot.com/o/tacoloco.jpg?alt=media&amp;token=077ef0f3-f8f1-4be7-9504-a5f4aaabf114', 'vacio'),
 (10, 'Las delicias', '32-B', 'Heroes', 'independencia', 'juarez', 'Centro', 'Chetumal', '98765432', 'negocio@gmail.com', 'pendiente', 'Un negocio cualquiera', 1, 1, 0, 89, 2, '', '/assets..', '/assets...'),
 (11, 'El emporio', '32-B', 'Heroes', 'Heros', 'emiliano zapato', 'Centro', 'Chetumal', '463743', 'negocio@gmail.com', 'pendiente', 'Un negocio cualquiera', 1, 1, 0, 89, 2, '', '/assets..', '/assets...'),
 (12, 'Dominos', '32-B', 'Heroes', 'Heros', 'emiliano zapato', 'Centro', 'Chetumal', '463743', 'negocio@gmail.com', 'pendiente', 'Un negocio cualquiera', 1, 1, 0, 89, 2, '', '/assets..', '/assets...'),
@@ -204,7 +204,9 @@ CREATE TABLE `pedidos` (
 
 INSERT INTO `pedidos` (`folio`, `id_cte`, `id_estab`, `hora_solicitud`, `status_pedido`, `forma_pago`, `total`) VALUES
 (105, 2, 9, '23', 'pendiente', 'efectivo', 45),
-(106, 1, 9, '43:7', 'pendiente', 'efectivo', 45);
+(106, 1, 9, '43:7', 'pendiente', 'efectivo', 45),
+(119, 5, 11, '03:36:56', 'No revisado', 'Efectivo', 0),
+(125, 5, 11, '03:41:06', 'No revisado', 'Efectivo', 0);
 
 -- --------------------------------------------------------
 
@@ -226,8 +228,9 @@ CREATE TABLE `publicidad` (
 --
 
 INSERT INTO `publicidad` (`id_pub`, `id_estab`, `nombre_pub`, `imagen_pub`, `descripcion_pub`, `productos_pub`) VALUES
-(11, 9, 'Baghettes fin de semana', '/assets/etc/', 'Todos los fines de semana en Pizzeria XXX,...', 'pizza mediana, pizza grande'),
-(12, 9, 'Chelas gratis', '/assets/etc/', 'Todos los fines de semana.', 'pizza mediana, pizza grande');
+(11, 9, 'Baghettes fin de semana', './assets/img/publicidad1.png', 'Todos los fines de semana en Pizzeria XXX,...', 'pizza mediana, pizza grande'),
+(12, 9, 'Chelas gratis', './assets/img/publicidad2.png', 'Todos los fines de semana.', 'pizza mediana, pizza grande'),
+(13, 10, 'Promoción de semana santa', './assets/img/publicidad3.jpg', 'Durante todo esta semana santa, en el consumo de un ceviche familiar, llevese otra orden gratis', 'Pendientes');
 
 -- --------------------------------------------------------
 
@@ -411,13 +414,13 @@ ALTER TABLE `establecimientos`
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `folio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
 -- AUTO_INCREMENT for table `publicidad`
 --
 ALTER TABLE `publicidad`
-  MODIFY `id_pub` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_pub` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `reservaciones`
