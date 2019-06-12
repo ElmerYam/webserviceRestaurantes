@@ -1,6 +1,7 @@
 <?php
 class establecimientos
 {
+
     const NOMBRE_TABLA = "establecimientos";
     const ID_ESTAB = "id_estab";
     const NOMBRE_ESTAB = "nombre_estab";
@@ -22,6 +23,7 @@ class establecimientos
     const UBICACION_GPS_ESTAB = "ubicacion_gps_estab";
     const FOTO_ESTAB = "foto_estab";
     const LOGO_ESTAB = "logo_estab";
+
     const CODIGO_EXITO = 1;
     const ESTADO_EXITO = 1;
     const ESTADO_ERROR = 2;
