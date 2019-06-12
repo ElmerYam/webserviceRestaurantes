@@ -27,7 +27,7 @@ class tiposCocina
     }
 
     public static function post($peticion) //------------------post
-    {
+    {        
         $idEmpleado = empleados::autorizar();
 
         $body = file_get_contents('php://input');
