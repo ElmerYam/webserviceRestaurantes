@@ -1,4 +1,7 @@
 <?php
+require '../vistas/VistaApi.php';
+require '../vistas/VistaXML.php';
+require '../datos/ConexionBD.php';
 
 class tiposrestaurantes
 {
@@ -13,18 +16,29 @@ class tiposrestaurantes
     const ESTADO_ERROR_BD = 3;
     const ESTADO_ERROR_PARAMETROS = 4;
     const ESTADO_NO_ENCONTRADO = 5;
+    
+    function get_price($name)
+    {
+        $products = [
+            "book"=>20,
+            "pen"=>10,
+            "pencil"=>5
+        ];
+        
+        foreach($products as $product=>$price)
+        {
+            if($product==$name)
+            {
+                return $price;
+                break;
+            }
+        }
+    }
 
     public static function get($peticion)
     {
-        //consulta si el usuario tiene una clave de poder hacer cambios
-        $idEmpleado = empleados::autorizar();
-
-        //si la variable peticion esta vacia
-        if (empty($peticion[0]))                    
-            return self::obtenerTiposRestaurantes($idEmpleado);
-        else
-            return self::obtenerTiposRestaurantes($idEmpleado, $peticion[0]);
-
+            $arreglo = self::obtenerTiposRestaurantes($peticion);        
+            return $arreglo;
     }
 
     public static function post($peticion) //------------------post
@@ -94,40 +108,27 @@ class tiposrestaurantes
      * @return array registros de la tabla contacto
      * @throws Exception
      */
-    private function obtenerTiposRestaurantes($idCliente, $idTipo = NULL)
+    private function obtenerTiposRestaurantes($idTipo = NULL)
     {
+        
         try {
             if (!$idTipo) {
-                $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;
-                    //" WHERE " . self::ID_PEDIDO . "=?";
-
-                // Preparar sentencia
+                $comando = "SELECT * FROM " . self::NOMBRE_TABLA ;                    
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
-                // Ligar idUsuario
-                $sentencia->bindParam(1, $idCliente, PDO::PARAM_INT);
+                $sentencia->execute();
+                $datos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+                $contenido = (array)$datos;
+                return $contenido;
 
             } else {
                 $comando = "SELECT * FROM " . self::NOMBRE_TABLA .
-                    " WHERE " . self::ID_TIPO_REST . "=?";// AND " .
-                    //self::ID_CLIENTE . "=?";
-
-                // Preparar sentencia
+                " WHERE " . self::ID_TIPO_REST . "=" . $idTipo;                
                 $sentencia = ConexionBD::obtenerInstancia()->obtenerBD()->prepare($comando);
-                // Ligar idContacto e idUsuario
-                $sentencia->bindParam(1, $idTipo, PDO::PARAM_INT);
-                //$sentencia->bindParam(2, $idCliente, PDO::PARAM_INT);
+                $sentencia->execute();
+                $datos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+                $contenido = (array)$datos;
+                return $contenido;
             }
-
-            // Ejecutar sentencia preparada
-            if ($sentencia->execute()) {
-                http_response_code(200);
-                return
-                    [
-                        "estado" => self::ESTADO_EXITO,
-                        "datos" => $sentencia->fetchAll(PDO::FETCH_ASSOC)
-                    ];
-            } else
-                throw new ExcepcionApi(self::ESTADO_ERROR, "Se ha producido un error");
 
         } catch (PDOException $e) {
             throw new ExcepcionApi(self::ESTADO_ERROR_BD, $e->getMessage());
